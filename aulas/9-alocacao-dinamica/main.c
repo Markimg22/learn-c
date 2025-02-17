@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char const *argv[]) {
+int main() {
     char *full_name = (char *)malloc(sizeof(char));
 
     if (full_name == NULL) {
@@ -9,7 +9,10 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
 
-    printf("Digite seu nome completo, digite ENTER ao terminar:\n");
+    int teste;
+    scanf("%d", &teste);
+
+    free(full_name);
 
     return 0;
 }

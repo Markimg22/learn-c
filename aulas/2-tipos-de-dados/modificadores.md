@@ -23,14 +23,11 @@ Exemplo: <kbd>unsigned int</kbd>, <kbd>long long int</kbd>
 #include <stdio.h>
 
 int main(int argc, char const *argv[]) {
-    long double numero_decimal_longo = 1231413.1231;
-    printf("Numero longo: %Lf\n", numero_decimal_longo);
-
     unsigned int valores_positivos = 12;
     printf("Numeros positivos: %d\n", valores_positivos);
 
-	long long age_of_universe = 1000000000.12991293123;
-    printf("%d\n", age_of_universe);
+    long double age_of_universe = 1000000000.1231233L;
+    printf("%Lf\n", age_of_universe);
 
     return 0;
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main(int argc, char const *argv[]) {
+int main() {
     int x = 42;
     printf("conteudo de x: %d\n", x);                          // 42
     printf("endereço de x: %p\n", &x);                         // endereço de 'x' em memória (ex.: 0x16f8ae7bc)

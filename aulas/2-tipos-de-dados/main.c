@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-int main(int argc, char const *argv[]) {
-    long long age_of_universe = 1000000000.12991293123;
-    printf("%d\n", age_of_universe);
+int main() {
+    long double age_of_universe = 1000000000.1231233L;
+    printf("%Lf\n", age_of_universe);
 
     return 0;
 }

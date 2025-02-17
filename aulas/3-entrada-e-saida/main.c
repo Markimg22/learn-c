@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char const *argv[]) {
+int main() {
     /* Capturar strings de tamanhos únicos */
     // char name[100];
     // printf("Digite seu primeiro nome:\n");

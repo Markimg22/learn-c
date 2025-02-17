@@ -1,6 +1,7 @@
+#include <stdbool.h>
 #include <stdio.h>
 
-int main(int argc, char const *argv[]) {
+int main() {
     // int x, y;
     // printf("Digite um número: \n");
     // scanf("%d", &x);
@@ -14,9 +15,9 @@ int main(int argc, char const *argv[]) {
     // bool maior_de_idade = idade >= 18;
     // printf("Maior idade? %s\n", maior_de_idade ? "true" : "false");
 
-    // int x = 10;
-    // x++;
-    // printf("%d", x);
+    int x = 10;
+    x++;
+    printf("%d", x);
 
     return 0;
 }
