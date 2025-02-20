@@ -2,17 +2,15 @@
 #include <stdlib.h>
 
 int main() {
-    char *full_name = (char *)malloc(sizeof(char));
+    // usando calloc() para alocar um array de 10 inteiros, todos iniciados em 0
+    int *array = calloc(10, sizeof(int));
 
-    if (full_name == NULL) {
-        printf("Erro ao alocar memória\n");
+    if (array == NULL) {
+        printf("Falha na alocação de memória.\n");
         return 1;
     }
 
-    int teste;
-    scanf("%d", &teste);
-
-    free(full_name);
+    free(array);
 
     return 0;
 }

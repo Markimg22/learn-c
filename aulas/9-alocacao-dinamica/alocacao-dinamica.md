@@ -53,6 +53,32 @@ int main(int argc, char const *argv[]) {
 }
 ```
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    printf("Tamanho de um char em bytes: %zu bytes\n", sizeof(char));
+    char *full_name = (char *)malloc(sizeof(char));
+
+    if (full_name == NULL) {
+        printf("Erro ao alocar memória\n");
+        return 1;
+    }
+
+    printf("Tamanho do ponteiro: %zu bytes\n", sizeof(full_name));
+    // 🚨 OBS: nesse caso o full_name tem apenas 8 bytes e você está inserindo um valor maior que 8 bytes, o C não informa erro,
+    // mas isso pode causar problemas, o programador deve se atentar a isso.
+    strcpy(full_name, "Marcos Campos Guilherme");
+    printf("Tamanho do ponteiro: %zu bytes\n", sizeof(full_name));
+
+    free(full_name);
+
+    return 0;
+}
+```
+
 > ## realloc():
 Reallocate Memory (Realocação de Memória), redimensiona um bloco de memória previamente alocado. Ela pode diminuir, aumentar, mover etc. Ela recebe o ponteiro original e o novo tamanho em bytes.
 
@@ -128,4 +154,44 @@ int main(int argc, char const *argv[]) {
 }
 ```
 
+> ## calloc()
+Clear Allocation (Alocação Limpa), serve para alocar dinamicamente memória para um array de elementos, inicializando todos os seus bytes com zero.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // usando calloc() para alocar um array de 10 inteiros, todos iniciados em 0
+    int *array = calloc(10, sizeof(int));
+
+    if (array == NULL) {
+        printf("Falha na alocação de memória.\n");
+        return 1;
+    }
+
+    free(array);
+
+    return 0;
+}
+```
+
 > ## free():
+Liberar ou deslocar memória que foi previamente alocada pelas funções *malloc()*, *calloc()* ou *realloc()*. Essencial para prevenir vazamento de memória e melhorar a eficiência
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *vetor = malloc(10 * sizeof(int));
+
+    if (vetor == NULL) {
+        printf("Erro na alocação de memória\n");
+    }
+
+    free(vetor); // libera memória
+
+    return 0;
+}
+```
