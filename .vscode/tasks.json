@@ -11,8 +11,8 @@
 				"-O0",
 				"-Wall",
 				"-Wextra",
-				"-std=c11",
-				"${file}",
+				"-std=c17",
+				"${fileDirname}/*.c",
 				"-o",
 				"${fileDirname}/bin/${fileBasenameNoExtension}"
 			],
