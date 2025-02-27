@@ -16,7 +16,7 @@ void print_array(const char *array) {
     printf("\n");
 }
 
-void draw_gibbet(int value) {
+void draw_hangman(int value) {
     switch (value) {
     case 0:
         printf("  _________ \n");
@@ -79,104 +79,124 @@ void draw_gibbet(int value) {
         printf("_|_____        \n");
         break;
     default:
+        printf("Valor inválido.\n");
         break;
     }
 }
 
-int main() {
+void initialize_player_answer(char *player_answer, size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        player_answer[i] = '_';
+    }
+    player_answer[size] = '\0';
+}
+
+void fill_player_answer(char *player_answer, char *secret_word, char *choisen_letter, size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        if (*choisen_letter == secret_word[i]) {
+            player_answer[i] = *choisen_letter;
+        }
+    }
+}
+
+void ask_for_a_letter(char *choisen_letter) {
+    printf("Qual Letra? ");
+    scanf(" %c", choisen_letter); // colocar espaço antes para o scanf ignorar os caracteres de espaço (/t, /n)
+    *choisen_letter = toupper(*choisen_letter);
+}
+
+void welcome_message() {
     printf("/****************/\n");
     printf("/ Jogo da Forca */\n");
     printf("/****************/\n");
+}
 
-    // defini a palavra secreta
+bool check_if_letter_already_chosen(char *wrong_letters, char *choisen_letter, int attemps) {
+    if (strchr(wrong_letters, *choisen_letter) == NULL) {
+        wrong_letters[attemps] = *choisen_letter;
+        return false;
+    } else {
+        printf("----------------------------\n");
+        printf("Letra '%c' já foi escolhida! Tente outra letra.\n", *choisen_letter);
+        printf("Letras escolhidas: ");
+        print_array(wrong_letters);
+        return true;
+    }
+}
+
+void game() {
+    welcome_message();
+
     char secret_word[20];
     sprintf(secret_word, "MELANCIA");
     size_t size_of_secret_word = strlen(secret_word);
 
-    // preenche a resposta inicialmente com '_', de acordo com o tamanho da palavra
-
-    char player_answers[size_of_secret_word + 1];
-    for (size_t i = 0; i < size_of_secret_word; i++) {
-        player_answers[i] = '_';
-    }
-    player_answers[size_of_secret_word] = '\0';
-
-    // controle de tentativas
+    char player_answer[size_of_secret_word + 1];
+    initialize_player_answer(player_answer, size_of_secret_word);
 
     int attemps = 0;
     int total_attemps = 5;
 
+    bool won = false;
+    bool lost = false;
+
     char wrong_letters[total_attemps];
 
-    // loop principal
-
-    while (true) {
-        draw_gibbet(attemps);
+    while (!won && !lost) {
+        draw_hangman(attemps);
 
         printf("===============================\n");
-        print_array(player_answers);
+        print_array(player_answer);
 
-        // pergunta uma letra
-        printf("Qual Letra? ");
         char choisen_letter;
-        scanf(" %c", &choisen_letter); // colocar espaço antes para o scanf ignorar os caracteres de espaço (/t, /n)
-        char choisen_letter_upper = toupper(choisen_letter);
+        ask_for_a_letter(&choisen_letter);
 
-        // verifica se a letra já foi escolhida anteriormente
-        if (strchr(wrong_letters, choisen_letter_upper) == NULL) {
-            wrong_letters[attemps] = choisen_letter_upper;
-        } else {
-            printf("----------------------------\n");
-            printf("Letra '%c' já foi escolhida! Tente outra letra.\n", choisen_letter_upper);
-            printf("Letras escolhidas: ");
-            print_array(wrong_letters);
+        int letter_already_chosen = check_if_letter_already_chosen(wrong_letters, &choisen_letter, attemps);
+        if (letter_already_chosen) {
             continue;
         }
 
-        // verifica se a letra escolhida existe na palavra secreta
-        if (strchr(secret_word, choisen_letter_upper) == NULL) {
+        if (strchr(secret_word, choisen_letter) == NULL) {
             attemps += 1;
-
             printf("----------------------------\n");
-            printf("Letra '%c' não existe na palavra secreta! Suas tentativas: %d\n", choisen_letter_upper, attemps);
-
-            if (attemps == total_attemps) {
-                printf("----------------------------\n");
-                draw_gibbet(attemps);
-                printf("Suas tentativas acabaram. Você Perdeu!!\n");
-                printf("A palavra certa era: %s\n", secret_word);
-                break;
-            }
-
-            continue;
+            printf("Letra '%c' não existe na palavra secreta! Suas tentativas: %d\n", choisen_letter, attemps);
         } else {
-            // preenche a resposta do jogador
-            for (size_t i = 0; i < size_of_secret_word; i++) {
-                if (choisen_letter_upper == secret_word[i]) {
-                    player_answers[i] = choisen_letter_upper;
-                }
-            }
+            fill_player_answer(player_answer, secret_word, &choisen_letter, size_of_secret_word);
         }
 
-        // verifica se acertou a palavra secreta
-        if (strcmp(player_answers, secret_word) == 0) {
-            printf("----------------------------\n");
-            print_array(player_answers);
-            printf("----------------------------\n");
-            printf("    Parabéns você ganhou!!  \n");
-            printf("         ___________        \n");
-            printf("        '._==_==_=_.'       \n");
-            printf("       .-\\:        /-.     \n");
-            printf("      | (|:.       |) |     \n");
-            printf("       '-|:.       |-'      \n");
-            printf("         \\::.      /       \n");
-            printf("          '::.   .'         \n");
-            printf("             ) (            \n");
-            printf("           _.' '._          \n");
-            printf("          '-------'         \n");
-            break;
+        if (attemps == total_attemps) {
+            lost = true;
+        }
+
+        if (strcmp(player_answer, secret_word) == 0) {
+            won = true;
         }
     }
 
+    if (won) {
+        printf("----------------------------\n");
+        print_array(player_answer);
+        printf("----------------------------\n");
+        printf("    Parabéns você ganhou!!  \n");
+        printf("         ___________        \n");
+        printf("        '._==_==_=_.'       \n");
+        printf("       .-\\:        /-.     \n");
+        printf("      | (|:.       |) |     \n");
+        printf("       '-|:.       |-'      \n");
+        printf("         \\::.      /       \n");
+        printf("          '::.   .'         \n");
+        printf("             ) (            \n");
+        printf("           _.' '._          \n");
+        printf("          '-------'         \n");
+    } else if (lost) {
+        printf("----------------------------\n");
+        draw_hangman(attemps);
+        printf("Suas tentativas acabaram. Você Perdeu!!\n");
+        printf("A palavra certa era: %s\n", secret_word);
+    }
+}
+
+int main() {
+    game();
     return 0;
 }
